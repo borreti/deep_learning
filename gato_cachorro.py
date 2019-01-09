@@ -12,16 +12,20 @@ from keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 from keras.preprocessing import image
 
+#layers sequence: convolution, pooling e flattening
+
 classificador = Sequential()
-#conv2D(nFiltros, tupla de tamanho do kernel)
+#conv2D(nFiltros, (tuple_kernel_size), (width, height, n_filters), activation function)
 classificador.add(Conv2D(32, (3,3), input_shape =(64,64,3), activation='relu'))
-classificador.add(BatchNormalization())
+classificador.add(BatchNormalization()) #batch normalization to speed up the learning
 classificador.add(MaxPooling2D(pool_size=(2,2)))
 
+#adding more layers
 classificador.add(Conv2D(32, (3,3), activation='relu'))
 classificador.add(BatchNormalization())
 classificador.add(MaxPooling2D(pool_size=(2,2)))
 
+#adding flatten layer
 classificador.add(Flatten())
 
 classificador.add(Dense(units = 128, activation = 'relu'))
@@ -30,6 +34,7 @@ classificador.add(Dense(units = 1, activation = 'sigmoid'))
 
 classificador.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
 
+#augmetattion
 gerador_treinamento = ImageDataGenerator(rescale = 1./255,
                                          rotation_range = 7,
                                          horizontal_flip = True,
